@@ -34,7 +34,7 @@ def order_already_confirmed(order, shop, request, **kwargs):
             return shop.redirect('plata_order_success')
         messages.warning(request,
             _('You have already confirmed this order earlier, but it is not fully paid for yet.'))
-        return HttpResponseRedirect(reverse('plata_shop_confirmation') + '?confirmed=1')
+        return HttpResponseRedirect(shop.reverse('plata_shop_confirmation') + '?confirmed=1')
 
 
 def order_cart_validates(order, shop, request, **kwargs):
@@ -240,6 +240,13 @@ class Shop(object):
         Helper which just passes everything on to ``django.shortcuts.render``
         """
         return render(request, template, context)
+
+    def reverse(self, url_name):
+        """
+        Hook for customizing the reverse function when used as application
+        content
+        """
+        return reverse(url_name)
 
     def redirect(self, url_name):
         """
